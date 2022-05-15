@@ -1,8 +1,9 @@
 import React from 'react';
 import { View, Text, TextInput, TouchableOpacity, SafeAreaView, Image } from 'react-native';
 import Pressable from 'react-native/Libraries/Components/Pressable/Pressable';
+import { ScreenNameHomeDetailsPage } from '../../Route/ScreenNames';
 import style from './style';
-const Index = (props) => {
+const Index = ({navigation,route}) => {
 
     const [Visible, setVisible] = React.useState(false);
     const [status, setstatus] = React.useState(false);
@@ -24,6 +25,7 @@ const Index = (props) => {
                     Visible == true &&
                     <Pressable onPress={() => {
                         //  STart Loading Another SCreen here
+                        navigation.navigate(ScreenNameHomeDetailsPage)
                     }}>
                         <Image
                             height={50}
