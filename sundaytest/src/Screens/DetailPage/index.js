@@ -40,7 +40,7 @@ const Index = ({navigation,route}) => {
                 }else{
                     console.log(" no  match ")
                 }
-                return item
+               
             })
 
             setSearchData(result);
@@ -65,7 +65,7 @@ const Index = ({navigation,route}) => {
                 }else{
                     console.log(" no  match ")
                 }
-                return item
+           
             })
 
             setSearchData(result);
@@ -150,8 +150,8 @@ const Index = ({navigation,route}) => {
                                 ApiCall(NextUrl,false)
                             }
                         }}
-                        extraData={isNull(search)==true?searchData:Data}
-                        data={isNull(search)==true?searchData:Data}
+                        extraData={searchData?.length>0?searchData:Data}
+                        data={searchData?.length>0?searchData:Data}
                         renderItem={({ item, index }) => {
                             return (<DetailsViewCell item={item}></DetailsViewCell>)
                         }}
