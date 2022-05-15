@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState ,useLayoutEffect} from 'react';
 import { View, Text, TextInput, TouchableOpacity, SafeAreaView, FlatList } from 'react-native';
 // import Pressable from 'react-native/Libraries/Components/Pressable/Pressable';
 import style from './style';
@@ -10,7 +10,8 @@ import { GetHomeUrl } from '../../Api/Webservices';
 import { onCallget } from '../../Api/Webservices/ApiHelper'
 import DetailsViewCell from '../../Component/CellView/DetailsViewCell'
 import FlatListRefreshView from '../../Component/FlatListRefreshView';
-const Index = (props) => {
+import SearchView from '../../Component/SearchView'
+const Index = ({navigation,route}) => {
 
     const [Visible, setVisible] = useState(false);
     const [status, setstatus] = React.useState(false);
@@ -18,11 +19,70 @@ const Index = (props) => {
     const [Error, setError] = useState("");
     const [NextUrl, setNextUrl] = useState("");
     const [isRefreshpage, setisRefreshpage] = useState(false);
+    const [search, setSearch] = useState("");
+    const [searchData, setSearchData] = useState([]);
 
     React.useEffect(() => {
         ApiCall(GetHomeUrl(), true);
     }, []);
 
+    React.useState(()=>{
+
+        if(isNull(search)==true)
+        {
+            console.log(" match ")
+            let result=[...Data]?.filter((item)=>{
+
+                if(item?.name?.includes(search))
+                {
+                    console.log(" match ")
+                    return item
+                }else{
+                    console.log(" no  match ")
+                }
+                return item
+            })
+
+            setSearchData(result);
+        }else{
+            setSearchData([])
+            console.log(" no  match +--")
+        }
+    },[search])
+
+    const change=(text)=>{
+                setSearch(text)
+                console.log(" hi ",text)
+                if(isNull(text)==true)
+        {
+            console.log(" match ")
+            let result=[...Data]?.filter((item)=>{
+
+                if(item?.name?.includes(text))
+                {
+                    console.log(" match ")
+                    return item
+                }else{
+                    console.log(" no  match ")
+                }
+                return item
+            })
+
+            setSearchData(result);
+        }else{
+            setSearchData([])
+            console.log(" no  match +--")
+        }
+    }
+    useLayoutEffect(()=>{
+            navigation.setOptions({
+                headerTitle: props => <SearchView 
+                    change={(text)=>{
+                        change(text)
+                    }}
+                title={' test message'}  {...props} />
+            })
+    },[])
     const ApiCall = (url = "", bool = false) => {
 
         if (bool) {
@@ -84,13 +144,14 @@ const Index = (props) => {
                         ListFooterComponent={isRefreshpage ==true ?(<FlatListRefreshView></FlatListRefreshView>):null}
                         onEndReachedThreshold={1}
                         onEndReached={(distance)=>{
-                            if(isNull(NextUrl)==true && isRefreshpage==false)
+                            if(isNull(NextUrl)==true && isRefreshpage==false && searchData?.length==0)
                             {
                                 setisRefreshpage(true)
                                 ApiCall(NextUrl,false)
                             }
                         }}
-                        data={Data}
+                        extraData={isNull(search)==true?searchData:Data}
+                        data={isNull(search)==true?searchData:Data}
                         renderItem={({ item, index }) => {
                             return (<DetailsViewCell item={item}></DetailsViewCell>)
                         }}
