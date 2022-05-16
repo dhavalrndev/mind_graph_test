@@ -173,7 +173,12 @@ const Index = ({ navigation, route }) => {
                         extraData={searchData}
                         data={searchData}
                         renderItem={({ item, index }) => {
-                            return (<DetailsViewCell item={item}></DetailsViewCell>)
+                            return (<DetailsViewCell 
+                                onClick={(item) => {
+                                    navigation?.navigate(ScreenNameHomeDetailsPageLevel, { data: item })
+
+                                }}
+                                item={item}></DetailsViewCell>)
                         }}
                     >
 
