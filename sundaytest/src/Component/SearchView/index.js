@@ -61,7 +61,7 @@ const style=StyleSheet.create({
         textAlign:'left',
         marginHorizontal:deviceBasedDynamicDimension(1,false,1),
         justifyContent:'center',
-        backgroundColor:'red',
+        backgroundColor:'white',
         alignSelf:'center',
         flex:0.95,
         // width:'100%'

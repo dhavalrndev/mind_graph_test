@@ -1,4 +1,4 @@
-import React, { useState ,useLayoutEffect} from 'react';
+import React, { useState, useLayoutEffect } from 'react';
 import { View, Text, TextInput, TouchableOpacity, SafeAreaView, FlatList } from 'react-native';
 // import Pressable from 'react-native/Libraries/Components/Pressable/Pressable';
 import style from './style';
@@ -11,7 +11,7 @@ import { onCallget } from '../../Api/Webservices/ApiHelper'
 import DetailsViewCell from '../../Component/CellView/DetailsViewCell'
 import FlatListRefreshView from '../../Component/FlatListRefreshView';
 import SearchView from '../../Component/SearchView'
-const Index = ({navigation,route}) => {
+const Index = ({ navigation, route }) => {
 
     const [Visible, setVisible] = useState(false);
     const [status, setstatus] = React.useState(false);
@@ -26,63 +26,47 @@ const Index = ({navigation,route}) => {
         ApiCall(GetHomeUrl(), true);
     }, []);
 
-    React.useState(()=>{
+   
+    const NoDataAvailableView=()=>{
+        return (
+            <View style={{height:150,backgroundColor:'white',justifyContent:'center'}}>
+                  <NoDataAvailable></NoDataAvailable>
+            </View>
+        )
+    }
 
-        if(isNull(search)==true)
-        {
-            console.log(" match ")
-            let result=[...Data]?.filter((item)=>{
-
-                if(item?.name?.includes(search))
-                {
-                    console.log(" match ")
+    const change = (text) => {
+        setSearch(text)
+        console.log(" hi ", text)
+        if (isNull(text) == true) {
+            // console.log(" match ")
+            let result = Data?.filter((item) => {
+                console.log(" match ", item?.name)
+                let name = item?.name?.toLowerCase();
+                if (name.includes(text.toLowerCase())) {
+                    console.log(" match ", item?.name)
                     return item
-                }else{
+                } else {
                     console.log(" no  match ")
+                    // return item
                 }
-               
             })
-
+            console.log("result---", result?.length)
             setSearchData(result);
-        }else{
-            setSearchData([])
-            console.log(" no  match +--")
-        }
-    },[search])
-
-    const change=(text)=>{
-                setSearch(text)
-                console.log(" hi ",text)
-                if(isNull(text)==true)
-        {
-            console.log(" match ")
-            let result=[...Data]?.filter((item)=>{
-
-                if(item?.name?.includes(text))
-                {
-                    console.log(" match ")
-                    return item
-                }else{
-                    console.log(" no  match ")
-                }
-           
-            })
-
-            setSearchData(result);
-        }else{
+        } else {
             setSearchData([])
             console.log(" no  match +--")
         }
     }
-    useLayoutEffect(()=>{
-            navigation.setOptions({
-                headerTitle: props => <SearchView 
-                    change={(text)=>{
-                        change(text)
-                    }}
+    useLayoutEffect(() => {
+        navigation.setOptions({
+            headerTitle: props => <SearchView
+                change={(text) => {
+                    change(text)
+                }}
                 title={' test message'}  {...props} />
-            })
-    },[])
+        })
+    }, [])
     const ApiCall = (url = "", bool = false) => {
 
         if (bool) {
@@ -92,20 +76,17 @@ const Index = ({navigation,route}) => {
             console.log("response ", response)
             if (response.success === true) {
 
-                if (response?.data?.results?.length > 0) 
-                {
-                    if(bool==true)
-                    {
+                if (response?.data?.results?.length > 0) {
+                    if (bool == true) {
                         setData(response?.data?.results)
-                    }else if(bool==false){
-                        let temp= Data=>[...Data,...response?.data?.results];
+                    } else if (bool == false) {
+                        let temp = Data => [...Data, ...response?.data?.results];
                         setData(temp)
                     }
-                    
+
                 }
                 setNextUrl('')
-                if (isNull(response?.data?.next)) 
-                {
+                if (isNull(response?.data?.next)) {
                     setNextUrl(response?.data?.next);
                 }
                 setisRefreshpage(false)
@@ -129,29 +110,52 @@ const Index = ({navigation,route}) => {
                 <Loader visible={Visible}></Loader>
 
                 {
-                    Data?.length > 0  && Visible==false &&
+                    Data?.length > 0 && Visible == false &&  isNull(search)==false &&
                     <FlatList
                         showsHorizontalScrollIndicator={false}
                         showsVerticalScrollIndicator={false}
                         maxToRenderPerBatch={40}
-                        
                         style={{ flex: 1, backgroundColor: 'white' }}
-                        // keyExtractor={({index,item}) => {
-                        //     console.log("index.toString()+item?.name ",item)
-                        //     return index+item?.name
-                        // }}
-                        keyExtractor={(item, index) => { return index.toString() + item?.name   }}
-                        ListFooterComponent={isRefreshpage ==true ?(<FlatListRefreshView></FlatListRefreshView>):null}
+                        keyExtractor={(item, index) => { return index.toString() + item?.name }}
+                        ListFooterComponent={isRefreshpage == true ? (<FlatListRefreshView></FlatListRefreshView>) : null}
                         onEndReachedThreshold={1}
-                        onEndReached={(distance)=>{
-                            if(isNull(NextUrl)==true && isRefreshpage==false && searchData?.length==0)
-                            {
+                        onEndReached={(distance) => {
+                            if (isNull(NextUrl) == true && isRefreshpage == false && searchData?.length == 0) {
                                 setisRefreshpage(true)
-                                ApiCall(NextUrl,false)
+                                ApiCall(NextUrl, false)
                             }
                         }}
-                        extraData={searchData?.length>0?searchData:Data}
-                        data={searchData?.length>0?searchData:Data}
+                        extraData={searchData?.length > 0 ? searchData : Data}
+                        data={searchData?.length > 0 ? searchData : Data}
+                        renderItem={({ item, index }) => {
+                            return (<DetailsViewCell item={item}></DetailsViewCell>)
+                        }}
+                    >
+
+                    </FlatList>
+                }
+
+
+
+                {/*  Manage Visiblility for search data only  */}
+                {
+                    searchData?.length > 0 && Visible == false &&
+                    <FlatList
+                        showsHorizontalScrollIndicator={false}
+                        showsVerticalScrollIndicator={false}
+                        maxToRenderPerBatch={40}
+                        style={{ flex: 1, backgroundColor: 'white' }}
+                        keyExtractor={(item, index) => { return index.toString() + item?.name }}
+                        ListFooterComponent={isRefreshpage == true ? (<FlatListRefreshView></FlatListRefreshView>) : null}
+                        onEndReachedThreshold={1}
+                        // onEndReached={(distance) => {
+                        //     if (isNull(NextUrl) == true && isRefreshpage == false && searchData?.length == 0) {
+                        //         setisRefreshpage(true)
+                        //         ApiCall(NextUrl, false)
+                        //     }
+                        // }}
+                        extraData={searchData}
+                        data={searchData}
                         renderItem={({ item, index }) => {
                             return (<DetailsViewCell item={item}></DetailsViewCell>)
                         }}
@@ -162,7 +166,16 @@ const Index = ({navigation,route}) => {
 
                 {
                     Visible == false && Data.length === 0 &&
-                    <NoDataAvailable></NoDataAvailable>
+                    <NoDataAvailableView/>
+                      
+             
+                }
+
+                {
+                    Visible == false  && searchData.length === 0 && isNull(search)==true &&
+                  <NoDataAvailableView>
+
+                  </NoDataAvailableView>
                 }
             </View>
         </SafeAreaView>
