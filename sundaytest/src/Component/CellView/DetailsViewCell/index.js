@@ -16,7 +16,15 @@ const Index = (props) => {
     return (
         <Card style={style.mainView}>
             <View style={{flex:1}}>
-                  <TouchableOpacity style={{flex:1}}>
+                  <TouchableOpacity 
+                  
+                  onPress={()=>{
+                      if(props?.onClick!=null && props?.onClick!=undefined)
+                      {
+                        props?.onClick(props?.item)
+                      }
+                  }}
+                  style={{flex:1}}>
                   <Text style={style.textstyleName}>{Name}</Text>
                   </TouchableOpacity>
             </View>

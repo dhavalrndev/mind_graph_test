@@ -11,6 +11,7 @@ import { onCallget } from '../../Api/Webservices/ApiHelper'
 import DetailsViewCell from '../../Component/CellView/DetailsViewCell'
 import FlatListRefreshView from '../../Component/FlatListRefreshView';
 import SearchView from '../../Component/SearchView'
+import { ScreenNameHomeDetailsPageLevel } from '../../Route/ScreenNames';
 const Index = ({ navigation, route }) => {
 
     const [Visible, setVisible] = useState(false);
@@ -128,7 +129,12 @@ const Index = ({ navigation, route }) => {
                         extraData={searchData?.length > 0 ? searchData : Data}
                         data={searchData?.length > 0 ? searchData : Data}
                         renderItem={({ item, index }) => {
-                            return (<DetailsViewCell item={item}></DetailsViewCell>)
+                            return (<DetailsViewCell
+                                onClick={(item)=>{
+                                    navigation?.navigate(ScreenNameHomeDetailsPageLevel,{data:item})
+
+                                }}
+                                item={item}></DetailsViewCell>)
                         }}
                     >
 
