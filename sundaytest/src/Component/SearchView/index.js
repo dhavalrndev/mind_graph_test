@@ -43,18 +43,20 @@ const Index=(props)=>{
 const style=StyleSheet.create({
     MainView:{
         flexDirection:'row',
-        flex:1,
+        flex:0.90,
+        
         // width:'50%',
+        // paddingRight:200,
         maxHeight:deviceBasedDynamicDimension(40,false,1),
-        marginLeft:deviceBasedDynamicDimension(10,false,1),
-        marginRight:deviceBasedDynamicDimension(20,false,1),
+        // marginLeft:deviceBasedDynamicDimension(10,false,1),
+        // marginRight:deviceBasedDynamicDimension(20,false,1),
         height:deviceBasedDynamicDimension(35,false,1),
         backgroundColor:'white',
         borderRadius:deviceBasedDynamicDimension(14,false,1),
         borderColor:'gray',
         borderWidth:deviceBasedDynamicDimension(0.5,false,1),
-        justifyContent:'center'
-
+        justifyContent:'center',
+        // marginHorizontal:deviceBasedDynamicDimension(35,false,1),
     },
     textView:{
         textAlignVertical:'center',
@@ -63,7 +65,7 @@ const style=StyleSheet.create({
         justifyContent:'center',
         backgroundColor:'white',
         alignSelf:'center',
-        flex:0.95,
+        flex:0.80,
         // width:'100%'
         fontSize:deviceBasedDynamicDimension(16,false,1),
         // paddingHorizontal:10,

@@ -13,7 +13,7 @@ const Stack = createNativeStackNavigator();
   const MainStack=()=>{
     return (
         <NavigationContainer>
-        <Stack.Navigator initialRouteName={ScreenNameHomeDetailsPage}>
+        <Stack.Navigator initialRouteName={ScreenNameHome}>
           <Stack.Screen   options={{ title: screen_message_home }} name={ScreenNameHome} component={Home} />
           <Stack.Screen   options={{ title: screen_message_details }} name={ScreenNameHomeDetailsPage} component={DetailPage} />
           <Stack.Screen   options={{ title: "" ,headerBackTitle:''}} name={ScreenNameHomeDetailsPageLevel} component={DetailPageLevel} />

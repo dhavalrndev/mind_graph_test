@@ -27,23 +27,24 @@ const Index = ({ navigation, route }) => {
         ApiCall(GetHomeUrl(), true);
     }, []);
 
-   
-    const NoDataAvailableView=()=>{
+
+    const NoDataAvailableView = () => {
         return (
-            <View style={{height:150,backgroundColor:'white',justifyContent:'center'}}>
-                  <NoDataAvailable></NoDataAvailable>
+            <View style={{ height: 150, backgroundColor: 'white', justifyContent: 'center' }}>
+                <NoDataAvailable></NoDataAvailable>
             </View>
         )
     }
 
     const change = (text) => {
-        setSearch(text)
+
         console.log(" hi ", text)
         if (isNull(text) == true) {
             // console.log(" match ")
             let result = Data?.filter((item) => {
                 console.log(" match ", item?.name)
                 let name = item?.name?.toLowerCase();
+                // console.log(" name ",name)
                 if (name.includes(text.toLowerCase())) {
                     console.log(" match ", item?.name)
                     return item
@@ -58,16 +59,25 @@ const Index = ({ navigation, route }) => {
             setSearchData([])
             console.log(" no  match +--")
         }
+
     }
+
+    // React.useEffect(() => {
+    //     change();
+    // }, { search })
+
+
     useLayoutEffect(() => {
         navigation.setOptions({
             headerTitle: props => <SearchView
                 change={(text) => {
-                    change(text)
+                    change(text);
+                    setSearch(text)
                 }}
                 title={' test message'}  {...props} />
         })
-    }, [])
+    }, [search])
+
     const ApiCall = (url = "", bool = false) => {
 
         if (bool) {
@@ -111,7 +121,7 @@ const Index = ({ navigation, route }) => {
                 <Loader visible={Visible}></Loader>
 
                 {
-                    Data?.length > 0 && Visible == false &&  isNull(search)==false &&
+                    Data?.length > 0 && Visible == false && isNull(search) == false &&
                     <FlatList
                         showsHorizontalScrollIndicator={false}
                         showsVerticalScrollIndicator={false}
@@ -130,8 +140,8 @@ const Index = ({ navigation, route }) => {
                         data={searchData?.length > 0 ? searchData : Data}
                         renderItem={({ item, index }) => {
                             return (<DetailsViewCell
-                                onClick={(item)=>{
-                                    navigation?.navigate(ScreenNameHomeDetailsPageLevel,{data:item})
+                                onClick={(item) => {
+                                    navigation?.navigate(ScreenNameHomeDetailsPageLevel, { data: item })
 
                                 }}
                                 item={item}></DetailsViewCell>)
@@ -172,16 +182,16 @@ const Index = ({ navigation, route }) => {
 
                 {
                     Visible == false && Data.length === 0 &&
-                    <NoDataAvailableView/>
-                      
-             
+                    <NoDataAvailableView />
+
+
                 }
 
                 {
-                    Visible == false  && searchData.length === 0 && isNull(search)==true &&
-                  <NoDataAvailableView>
+                    Visible == false && searchData.length === 0 && isNull(search) == true &&
+                    <NoDataAvailableView>
 
-                  </NoDataAvailableView>
+                    </NoDataAvailableView>
                 }
             </View>
         </SafeAreaView>

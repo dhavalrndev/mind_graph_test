@@ -175,8 +175,6 @@ const Index = ({ navigation, route }) => {
                             </FlatList>
                         }
 
-
-
                         {
                             GraphData?.labels?.length > 0 &&
                             <BarChart
